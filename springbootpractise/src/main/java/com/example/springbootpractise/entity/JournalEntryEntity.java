@@ -5,9 +5,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
+import lombok.Data;
 
 @Entity
 @Table(name="journalEntries")
+@Data
 public class JournalEntryEntity {
 
     @Id
@@ -18,31 +20,5 @@ public class JournalEntryEntity {
 
     @Column
     private String text;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getContext() {
-        return context;
-    }
-
-    public void setContext(String context) {
-        this.context = context;
-    }
-
-
 
 }

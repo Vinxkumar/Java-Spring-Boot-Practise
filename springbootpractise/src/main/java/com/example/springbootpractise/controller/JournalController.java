@@ -2,7 +2,6 @@ package com.example.springbootpractise.controller;
 
 
 import com.example.springbootpractise.entity.JournalEntryEntity;
-import com.example.springbootpractise.service.JournalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -14,11 +14,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // 🔥 THIS FIXES YOUR ISSUE
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().authenticated()
-                )
-                .httpBasic(withDefaults()); // for Postman
+                        .anyRequest().permitAll()
+                );
+
 
         return http.build();
     }
