@@ -1,8 +1,10 @@
 package com.example.springbootpractise.controller;
 
-
+import com.example.springbootpractise.dto.JournalDto;
 import com.example.springbootpractise.entity.JournalEntryEntity;
+import com.example.springbootpractise.services.JournalSeriveImp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.RequestEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,39 +14,35 @@ import java.util.List;
 public class JournalController {
 
     @Autowired
-    JournalService journalService;
+    JournalSeriveImp journalSeriveImp;
 
     @GetMapping
-    public List<JournalEntryEntity> ListAllJournals() {
-        return journalService.ListJournals();
+    public List<JournalEntryEntity> listAllJournals() {
+        return journalSeriveImp.listAllJournal();
     }
 
     @GetMapping("/{id}")
-    public JournalEntryEntity ListJournal(@PathVariable String id) {
-        return journalService.ListJournalById(id);
+    public JournalDto listJournal(@PathVariable String id) {
+        return journalSeriveImp.getJournalById(id);
     }
 
     @PostMapping
-    public String CreateJournal(@RequestBody JournalEntryEntity journalEntryEntity) {
-        if(journalService.ListJournalById(journalEntryEntity.getId()) == null) {
-            journalService.CreateJournal(journalEntryEntity);
-            return "User Created with id:" + journalEntryEntity.getId();
-        }
-        return "Journal with this id already exists";
+    public JournalDto CreateJournal(@RequestBody JournalDto journalDto) {
+        return journalSeriveImp.createJournalEntry(journalDto);
     }
 
     @PutMapping
-    public String UpdateJournal(@RequestBody JournalEntryEntity journalEntryEntity) {
-        return journalService.UpdateJournalById(journalEntryEntity);
+    public JournalDto UpdateJournal(@RequestBody JournalDto journalDto) {
+        return journalSeriveImp.updateJournal(journalDto.getId(), journalDto);
     }
 
     @DeleteMapping("/{id}")
-    public String DeleteJournalById(@PathVariable String id) {
-        return journalService.DeleteJournalById(id);
+    public void DeleteJournalById(@PathVariable String id) {
+        journalSeriveImp.deleteJournalById(id);
     }
 
     @DeleteMapping("/all")
-    public String DeleteAllJournals() {
-        return journalService.DeleteAllJournal();
+    public void DeleteAllJournals() {
+        journalSeriveImp.deleteAllJournal();
     }
 }

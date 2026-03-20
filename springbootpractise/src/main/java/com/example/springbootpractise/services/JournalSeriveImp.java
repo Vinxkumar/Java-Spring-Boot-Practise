@@ -14,7 +14,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class journalSeriveImp implements JournalService {
+public class JournalSeriveImp implements JournalService {
 
     @Autowired
     private JournalRepository journalRepository;
@@ -37,12 +37,15 @@ public class journalSeriveImp implements JournalService {
     public JournalDto getJournalById(String id) {
         log.info("Fetching Journal with ID: {}", id);
         JournalEntryEntity journalEntryEntity = journalRepository.findById(id).orElseThrow(() -> new RuntimeException("Journal with ID: "+id+" Not Found....!") );
+        log.info("Journal with ID: {} Fetched Successfully...!", id);
         return mapToDto(journalEntryEntity);
     }
 
     @Override
-    public List<JournalDto> listAllJournal() {
-        return List.of();
+    public List<JournalEntryEntity> listAllJournal() {
+        log.info("Fetching all Journal Entries...!");
+        return journalRepository.findAll();
+//        log.info("Journals Fetched Successfully");
     }
 
     @Override
@@ -52,9 +55,13 @@ public class journalSeriveImp implements JournalService {
         JournalEntryEntity existingJournalEntry = journalRepository.findById(id).orElseThrow(() -> new RuntimeException("Journal with ID: "+id+" Not Found....!"));
         if(!(existingJournalEntry.getText() == journalDto.getText())) {
             existingJournalEntry.setText(journalDto.getText());
+        } else if (journalDto.getText() == null) {
+            existingJournalEntry.setText(existingJournalEntry.getText());
         }
         if(!(existingJournalEntry.getContext() == journalDto.getContext())) {
             existingJournalEntry.setContext(journalDto.getContext());
+        } else if (journalDto.getContext() == null) {
+            existingJournalEntry.setContext(existingJournalEntry.getContext());
         }
 
         JournalEntryEntity updatedJournal = journalRepository.save(existingJournalEntry);
@@ -63,12 +70,13 @@ public class journalSeriveImp implements JournalService {
     }
 
     @Override
+    @Transactional
     public void deleteAllJournal() {
         log.info("Attempted to Delete all Records.!");
         journalRepository.deleteAll();
         log.info("Deleted All Journals Successfully");
     }
-
+    @Transactional
     @Override
     public void deleteJournalById(String id) {
         log.info("Attempt to Delete Journal with ID: {}", id);
@@ -86,8 +94,6 @@ public class journalSeriveImp implements JournalService {
         JournalDto journalDto = new ModelMapper().map(journalEntryEntity, JournalDto.class);
         return journalDto;
     }
-
-
 }
 
 
