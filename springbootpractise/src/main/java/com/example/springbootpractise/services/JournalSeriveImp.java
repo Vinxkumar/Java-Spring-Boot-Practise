@@ -5,6 +5,7 @@ import com.example.springbootpractise.dto.JournalDto;
 import com.example.springbootpractise.entity.JournalEntryEntity;
 import com.example.springbootpractise.repository.JournalRepository;
 import com.example.springbootpractise.services.service.JournalService;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class JournalSeriveImp implements JournalService {
     @Autowired
     JournalRepository journalRepository;
 
+    @Transactional
     @Override
     public JournalDto createJournalEntry(JournalDto journalDto) {
             if(journalRepository.findById(journalDto.getId()).isPresent()) {
@@ -51,6 +53,7 @@ public class JournalSeriveImp implements JournalService {
         }
     }
 
+    @Transactional
     @Override
     public JournalDto updateJournal(String id, JournalDto newJournalDto) {
         JournalEntryEntity oldJournal = journalRepository.findById(id).orElseThrow(() -> new RuntimeException("Failed to Find Journal with ID: "+ id));
@@ -73,12 +76,14 @@ public class JournalSeriveImp implements JournalService {
         return maptoDto(updatedJournal);
     }
 
+    @Transactional
     @Override
     public void deleteAllJournal() {
         log.info("Deleted all records successfully");
         journalRepository.deleteAll();
     }
 
+    @Transactional
     @Override
     public void deleteJournalById(String id) {
         if(journalRepository.findById(id).isPresent()) {
